@@ -3,19 +3,19 @@ package com.biorecorder.comport;
 import java.util.List;
 
 public class ComPortPacket {
-    private List<Byte> packet;
+    private int[] packet;
     private int delay;
 
-    public ComPortPacket(List<Byte> packet, int delay) {
+    public ComPortPacket(int[] packet, int delay) {
         this.packet = packet;
         this.delay = delay;
     }
 
-    public List<Byte> getPacket() {
+    public int[] getPacket() {
         return packet;
     }
 
-    public void setPacket(List<Byte> packet) {
+    public void setPacket(int[] packet) {
         this.packet = packet;
     }
 

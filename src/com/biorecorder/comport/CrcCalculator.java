@@ -7,12 +7,12 @@ public class CrcCalculator {
     public static int crcAddByte(int dataByte, int crc) {
         int msg = dataByte << 8;
         for (int j = 0; j < 8; j++) {
-             if(((msg ^ crc)>>15)== 1){
-                 crc = ((crc << 1) ^ CRC16_POLY)&0xFFFF;
-             }else {
-                 crc = (crc << 1) & 0xFFFF;
-             }
-             msg = (msg << 1) & 0xFFFF;
+            if(((msg ^ crc)>>15)== 1){
+                crc = ((crc << 1) ^ CRC16_POLY)&0xFFFF;
+            }else {
+                crc = (crc << 1) & 0xFFFF;
+            }
+            msg = (msg << 1) & 0xFFFF;
         }
         return crc;
     }

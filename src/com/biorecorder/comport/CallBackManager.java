@@ -15,17 +15,21 @@ public class CallBackManager implements ComPortListener{
     private List<ComPortPacket> commandsSet = new ArrayList<ComPortPacket>();
     private int comandCounter = 0;
     private int delay;
+    public static final int DEL_APP_CMD = 0x15;
+    public static final int TX_VERSION_CMD = 0x19;
+    public static final int JUMP2APP_CMD = 0x1c;
     private static Log LOG = LogFactory.getLog(CallBackManager.class);
 
     public CallBackManager(){
-        int cmd = 0x19;
-        int crc = CrcCalculator.crcAddByte(cmd,0xFFFF);
-        int crc_h = crc>>8;
-        int crc_l = crc & 0xFF;
-        byte[] bytes = new byte[]{((byte)0x80),((byte)0x01),((byte)cmd),((byte)crc_h),((byte)crc_l)};
-        commandsSet.add(new ComPortPacket(bytesToBiteList(bytes),100));
+
+         //commandsSet.add(createBslCommand(TX_VERSION_CMD));
+       commandsSet.add(createBslCommand(DEL_APP_CMD));
+       /*.   commandsSet.addAll(new Bsl().BSL_programMemorySegment(new AddressSegment1()));
+        commandsSet.addAll(new Bsl().BSL_programMemorySegment(new AddressSegment2()));
+        commandsSet.addAll(new Bsl().BSL_programMemorySegment(new AddressSegmentCrc()));
+        commandsSet.add(createBslCommand(JUMP2APP_CMD));*/
         try {
-            comPort = new ComPort("COM32", 9600);
+            comPort = new ComPort("COM21", 460800);
         } catch (SerialPortException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
@@ -39,14 +43,15 @@ public class CallBackManager implements ComPortListener{
     @Override
     public void onByteReceived(byte inByte) {
         rxData[rxCntr++] = inByte;
-        System.out.println(inByte );
-        /*if(inByte == '\n'){
-            onResponceReceived(rxCntr);
-            rxCntr = 0;
-        }*/
+        System.out.printf("val=%x \n",inByte);
+        if(inByte == 0){
+            sendCommand();
+        }else {
+            System.out.printf("send command fail. inByte = " + inByte );
+        }
     }
 
-    private void onResponceReceived(int rxCntr) {
+    /*private void onResponceReceived(int rxCntr) {
         String resp = new String(rxData, 0, rxCntr);
 
 
@@ -54,11 +59,17 @@ public class CallBackManager implements ComPortListener{
         if("OK\r\n".equals(resp)) {
             sendCommand();
         }
+    }*/
+
+
+    private ComPortPacket createBslCommand(int cmd){
+        int crc = CrcCalculator.crcAddByte(cmd,0xFFFF);
+        int[] bslPacket = new int[]{0x80,0x01,cmd,crc&0xFF,crc>>8};
+        return new ComPortPacket(bslPacket,100);
     }
 
-
-
     public void startProgramming() {
+
         sendCommand();
     }
 
@@ -73,18 +84,22 @@ public class CallBackManager implements ComPortListener{
                 }
             }
             delay = command.getDelay();
-            List<Byte>  bytеList = command.getPacket();
+            List<Byte>  bytеList = bytesToBiteList(command.getPacket());
             LOG.info("Out: " + bytеList);
+            for (int i = 0; i < bytеList.size(); i++) {
+                byte aByte = bytеList.get(i);
+                System.out.printf("val=%x \n",aByte&0xFF);
+            }
             comPort.writeToPort(bytеList);
         }  else{
             LOG.info("End of the command set");
         }
     }
 
-    private static List<Byte> bytesToBiteList(byte[] b){
+    private static List<Byte> bytesToBiteList(int[] b){
         List<Byte> result = new ArrayList<Byte>();
         for (int i = 0; i < b.length; i++) {
-            byte aByte = b[i];
+            byte aByte = (byte)b[i];
             result.add(aByte);
         }
         return result;
