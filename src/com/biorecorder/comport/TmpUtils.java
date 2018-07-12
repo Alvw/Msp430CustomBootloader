@@ -4,13 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TmpUtils {
-    public static int APP_START_ADDRESS = 0xC003;
-    public static int APP_END_ADDRESS = 0xFBFF;
+    public static int APP_START_ADDRESS = 0x8003;
+    public static int APP_END_ADDRESS = 0xF9FF;
     List<AddressSegment> appData = new ArrayList<AddressSegment>();
 
     public TmpUtils() {
         appData.add(new AddressSegment1());
         appData.add(new AddressSegment2());
+//        appData.add(new AddressSegment3());
+//        appData.add(new AddressSegment4());
     }
     
     public int getAppCrc(){

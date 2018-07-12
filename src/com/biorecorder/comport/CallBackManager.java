@@ -23,13 +23,16 @@ public class CallBackManager implements ComPortListener{
     public CallBackManager(){
 
          //commandsSet.add(createBslCommand(TX_VERSION_CMD));
-       commandsSet.add(createBslCommand(DEL_APP_CMD));
-       /*.   commandsSet.addAll(new Bsl().BSL_programMemorySegment(new AddressSegment1()));
+        commandsSet.add(createBslCommand(DEL_APP_CMD));
+        commandsSet.addAll(new Bsl().BSL_programMemorySegment(new AddressSegment1()));
         commandsSet.addAll(new Bsl().BSL_programMemorySegment(new AddressSegment2()));
+//        commandsSet.addAll(new Bsl().BSL_programMemorySegment(new AddressSegment3()));
+//        commandsSet.addAll(new Bsl().BSL_programMemorySegment(new AddressSegment4()));
         commandsSet.addAll(new Bsl().BSL_programMemorySegment(new AddressSegmentCrc()));
-        commandsSet.add(createBslCommand(JUMP2APP_CMD));*/
+        commandsSet.add(createBslCommand(JUMP2APP_CMD));
         try {
-            comPort = new ComPort("COM21", 460800);
+//            comPort = new ComPort("COM26", 460800);
+            comPort = new ComPort("COM26", 460800);
         } catch (SerialPortException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
@@ -42,8 +45,8 @@ public class CallBackManager implements ComPortListener{
 
     @Override
     public void onByteReceived(byte inByte) {
-        rxData[rxCntr++] = inByte;
-        System.out.printf("val=%x \n",inByte);
+       // rxData[rxCntr++] = inByte;
+        System.out.printf("incoming byte value=%x \n",inByte);
         if(inByte == 0){
             sendCommand();
         }else {
@@ -69,7 +72,6 @@ public class CallBackManager implements ComPortListener{
     }
 
     public void startProgramming() {
-
         sendCommand();
     }
 
@@ -104,6 +106,4 @@ public class CallBackManager implements ComPortListener{
         }
         return result;
     }
-
-
 }
