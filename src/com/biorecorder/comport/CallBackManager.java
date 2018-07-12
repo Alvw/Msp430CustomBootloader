@@ -26,8 +26,8 @@ public class CallBackManager implements ComPortListener{
         commandsSet.add(createBslCommand(DEL_APP_CMD));
         commandsSet.addAll(new Bsl().BSL_programMemorySegment(new AddressSegment1()));
         commandsSet.addAll(new Bsl().BSL_programMemorySegment(new AddressSegment2()));
-//        commandsSet.addAll(new Bsl().BSL_programMemorySegment(new AddressSegment3()));
-//        commandsSet.addAll(new Bsl().BSL_programMemorySegment(new AddressSegment4()));
+        commandsSet.addAll(new Bsl().BSL_programMemorySegment(new AddressSegment3()));
+        commandsSet.addAll(new Bsl().BSL_programMemorySegment(new AddressSegment4()));
         commandsSet.addAll(new Bsl().BSL_programMemorySegment(new AddressSegmentCrc()));
         commandsSet.add(createBslCommand(JUMP2APP_CMD));
         try {

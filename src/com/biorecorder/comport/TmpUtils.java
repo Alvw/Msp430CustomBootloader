@@ -11,8 +11,8 @@ public class TmpUtils {
     public TmpUtils() {
         appData.add(new AddressSegment1());
         appData.add(new AddressSegment2());
-//        appData.add(new AddressSegment3());
-//        appData.add(new AddressSegment4());
+        appData.add(new AddressSegment3());
+        appData.add(new AddressSegment4());
     }
     
     public int getAppCrc(){
